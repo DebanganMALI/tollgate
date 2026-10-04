@@ -50,3 +50,15 @@ def check_daily_budget(
             message=f"{spent} spent in 24h; {p.amount} would exceed {cfg.daily_budget}",
         )
     return None
+
+
+def check_velocity(
+    p: PaymentProposal, cfg: PolicyConfig, history: SpendHistory, now: datetime
+) -> Violation | None:
+    recent = history.count_since(now - timedelta(seconds=cfg.window_seconds))
+    if recent + 1 > cfg.max_tx_per_window:
+        return Violation(
+            rule="velocity",
+            message=f"{recent} payments in {cfg.window_seconds}s; limit {cfg.max_tx_per_window}",
+        )
+    return None
