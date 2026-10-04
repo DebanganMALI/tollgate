@@ -26,3 +26,12 @@ def check_merchant(p: PaymentProposal, cfg: PolicyConfig) -> Violation | None:
             message=f"Merchant '{p.merchant_id}' is not on the allow-list",
         )
     return None
+
+
+def check_category(p: PaymentProposal, cfg: PolicyConfig) -> Violation | None:
+    if p.category in cfg.blocked_categories:
+        return Violation(
+            rule="category_blocked",
+            message=f"Category '{p.category}' is blocked",
+        )
+    return None
