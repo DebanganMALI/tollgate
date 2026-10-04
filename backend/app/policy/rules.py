@@ -15,3 +15,14 @@ def check_amount(p: PaymentProposal, cfg: PolicyConfig) -> Violation | None:
             severity=Verdict.REVIEW,
         )
     return None
+
+
+def check_merchant(p: PaymentProposal, cfg: PolicyConfig) -> Violation | None:
+    merchant = p.merchant_id.strip().casefold()
+    allowed = {m.casefold() for m in cfg.allowed_merchants}
+    if merchant not in allowed:
+        return Violation(
+            rule="merchant_not_allowed",
+            message=f"Merchant '{p.merchant_id}' is not on the allow-list",
+        )
+    return None
