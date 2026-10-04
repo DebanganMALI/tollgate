@@ -12,6 +12,7 @@ class PolicyConfig(BaseModel):
     daily_budget: Decimal = Field(default=Decimal("300.00"), gt=0)
     max_tx_per_window: int = Field(default=5, gt=0)
     window_seconds: int = Field(default=60, gt=0)
+    allowed_currencies: frozenset[str] = frozenset({"USD"})
     allowed_merchants: frozenset[str] = frozenset(
         {"github", "render", "figma", "notion", "aws"}
     )

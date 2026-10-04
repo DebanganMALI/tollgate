@@ -5,6 +5,15 @@ from app.policy.history import SpendHistory
 from app.policy.models import PaymentProposal, Verdict, Violation
 
 
+def check_currency(p: PaymentProposal, cfg: PolicyConfig) -> Violation | None:
+    if p.currency not in cfg.allowed_currencies:
+        return Violation(
+            rule="currency_not_allowed",
+            message=f"Currency '{p.currency}' is not allowed",
+        )
+    return None
+
+
 def check_amount(p: PaymentProposal, cfg: PolicyConfig) -> Violation | None:
     if p.amount > cfg.max_per_transaction:
         return Violation(
