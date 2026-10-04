@@ -17,6 +17,7 @@ class PolicyEngine:
         now = now or datetime.now(UTC)
         cfg = self.config
         results = [
+            rules.check_currency(p, cfg),
             rules.check_amount(p, cfg),
             rules.check_merchant(p, cfg),
             rules.check_category(p, cfg),
