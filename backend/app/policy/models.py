@@ -2,7 +2,7 @@ from decimal import Decimal
 from enum import StrEnum
 from typing import Self
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Category(StrEnum):
@@ -14,6 +14,8 @@ class Category(StrEnum):
 
 
 class PaymentProposal(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     merchant_id: str = Field(min_length=1, max_length=64)
     amount: Decimal = Field(gt=0, max_digits=10, decimal_places=2)
     currency: str = Field(default="USD", pattern="^[A-Z]{3}$")
