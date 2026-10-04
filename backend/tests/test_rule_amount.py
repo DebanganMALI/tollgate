@@ -1,8 +1,8 @@
 from decimal import Decimal
 
 import pytest
-from app.policy.config import PolicyConfig
 
+from app.policy.config import PolicyConfig
 from app.policy.models import PaymentProposal, Verdict
 from app.policy.rules import check_amount
 
