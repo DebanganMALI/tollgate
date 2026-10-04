@@ -1,8 +1,8 @@
 from decimal import Decimal
 
 import pytest
-
 from app.policy.config import PolicyConfig
+
 from app.policy.models import PaymentProposal, Verdict
 from app.policy.rules import check_amount
 
@@ -33,5 +33,5 @@ def test_large_amounts_denied(amount):
 
 
 def test_respects_custom_config():
-    cfg = PolicyConfig(max_per_transaction=Decimal("20"), review_above=Decimal("10"))
+    cfg = PolicyConfig(max_per_transaction=Decimal(20), review_above=Decimal(10))
     assert check_amount(proposal("25"), cfg).severity is Verdict.DENY
