@@ -25,3 +25,17 @@ def test_add_defaults_to_now():
     h = SpendHistory()
     h.add(Decimal(5))
     assert h.count_since(datetime.now(UTC) - timedelta(minutes=1)) == 1
+
+
+def test_add_returns_unique_ids():
+    h = SpendHistory()
+    assert h.add(Decimal(1), NOW) != h.add(Decimal(1), NOW)
+
+
+def test_remove_by_id():
+    h = SpendHistory()
+    keep = h.add(Decimal(10), NOW)
+    drop = h.add(Decimal(20), NOW)
+    assert h.remove(drop) is True
+    assert h.remove(drop) is False
+    assert [r.id for r in h.records] == [keep]
