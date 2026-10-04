@@ -1,4 +1,7 @@
+from datetime import datetime, timedelta
+
 from app.policy.config import PolicyConfig
+from app.policy.history import SpendHistory
 from app.policy.models import PaymentProposal, Verdict, Violation
 
 
@@ -33,5 +36,17 @@ def check_category(p: PaymentProposal, cfg: PolicyConfig) -> Violation | None:
         return Violation(
             rule="category_blocked",
             message=f"Category '{p.category}' is blocked",
+        )
+    return None
+
+
+def check_daily_budget(
+    p: PaymentProposal, cfg: PolicyConfig, history: SpendHistory, now: datetime
+) -> Violation | None:
+    spent = history.total_since(now - timedelta(days=1))
+    if spent + p.amount > cfg.daily_budget:
+        return Violation(
+            rule="daily_budget",
+            message=f"{spent} spent in 24h; {p.amount} would exceed {cfg.daily_budget}",
         )
     return None
